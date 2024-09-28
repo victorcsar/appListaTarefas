@@ -4,17 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Ionicons } from '@expo/vector-icons'; // Importando os ícones
 
 export default function DetalhesTarefaScreen({ route, navigation }: any) {
-  const { tarefa } = route.params; // Recebe os detalhes da tarefa através dos parâmetros da rota
+  const { tarefa, removerTarefa } = route.params; // Recebe os detalhes da tarefa através dos parâmetros da rota
+
+  const handleDelete = () => {
+    removerTarefa(tarefa.id); // Chama a função para remover a tarefa
+    navigation.goBack(); // Volta para a tela anterior
+  };
 
   const handleEdit = () => {
     // Adicione sua lógica de edição aqui
     console.log("Editar tarefa");
   };
 
-  const handleDelete = () => {
-    // Adicione sua lógica de exclusão aqui
-    console.log("Excluir tarefa");
-  };
 
   return (
     <View style={styles.container}>

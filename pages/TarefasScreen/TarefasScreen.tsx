@@ -65,7 +65,7 @@ export default function TarefasScreen() {
   };
 
   const renderTarefa = ({ item }: { item: Tarefa }) => (
-    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", { tarefa: item })}>
+    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", { tarefa: item, removerTarefa })}>
       <View style={styles.card}>
         <Text style={styles.title}>{item.titulo}</Text>
         <Text style={styles.description}>{item.descricao}</Text>
