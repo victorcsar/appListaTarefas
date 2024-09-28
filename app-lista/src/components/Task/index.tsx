@@ -1,12 +1,25 @@
 import React from 'react';
-import { Container, TextTitle, TextDetail, TextDate } from './styles';
+import {Container, TextTitle, TextDetail, TextDate, ContainerTitulo} from './styles';
+import {Image} from 'react-native';
 
-export function Task() {
+
+// Definindo a interface das props (se você precisar de props no futuro)
+type TaskProps = {
+  title: string,
+  detail: string,
+  date: string
+}
+
+// Componente Task tipado
+export default function Task (props: TaskProps){
     return (
         <Container>
-            <TextTitle>Tarefa 1</TextTitle>
-            <TextDetail>Descrição da tarefa 1</TextDetail>
-            <TextDate>10/06/2021</TextDate>
+            <ContainerTitulo> 
+                <TextTitle>{props.title}</TextTitle>
+                <Image source={require('../../../assets/icons/clock.png')} />
+            </ContainerTitulo>
+            <TextDetail>{props.detail}</TextDetail>
+            <TextDate>{props.date}</TextDate>
         </Container>
     );
-}
+};
