@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Ionicons } from '@expo/vector-icons'; // Ícones
@@ -18,6 +18,23 @@ export default function TarefasScreen() {
   const [novoTitulo, setNovoTitulo] = useState('');
   const [novaDescricao, setNovaDescricao] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Função para carregar as tarefas salvas ao abrir o app
+  const carregarTarefas = async () => {
+    try {
+      const tarefasSalvas = await AsyncStorage.getItem('tarefas');
+      if (tarefasSalvas) {
+        setTarefas(JSON.parse(tarefasSalvas));
+      }
+    } catch (e) {
+      console.log('Erro ao carregar tarefas:', e);
+    }
+  };
+
+  // useEffect para carregar as tarefas ao abrir o app
+  useEffect(() => {
+    carregarTarefas();
+  }, []);
 
   const adicionarTarefa = () => {
     if (novoTitulo && novaDescricao) {
@@ -54,7 +71,6 @@ export default function TarefasScreen() {
           <Ionicons name="trash-outline" size={25} color="#fff" />
         </TouchableOpacity>
       </View>
-      
     </View>
   );
 
@@ -69,7 +85,6 @@ export default function TarefasScreen() {
       {/* Header com o logo */}
       <SafeAreaView> 
         <View style={styles.header}>
-          {/* <Ionicons name="menu-outline" size={30} color="#0056D2" /> */}
           <Text style={styles.headerTitle}>LISTA DE TAREFAS</Text>
         </View>
       </SafeAreaView>
