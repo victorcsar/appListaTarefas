@@ -1,84 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AntDesign, Ionicons } from '@expo/vector-icons'; // Importando os ícones
 
-interface Tarefa {
-  id: string;
-  titulo: string;
-  descricao: string;
-  data: string;
-}
+export default function DetalhesTarefaScreen({ route, navigation }: any) {
+  const { tarefa } = route.params; // Recebe os detalhes da tarefa através dos parâmetros da rota
 
-export default function TarefaDetalhes() {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { tarefa }: { tarefa: Tarefa } = route.params;
+  const handleEdit = () => {
+    // Adicione sua lógica de edição aqui
+    console.log("Editar tarefa");
+  };
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [novoTitulo, setNovoTitulo] = useState(tarefa.titulo);
-  const [novaDescricao, setNovaDescricao] = useState(tarefa.descricao);
-
-  const editarTarefa = () => {
-    // Lógica para salvar a tarefa editada
-    setModalVisible(false);
+  const handleDelete = () => {
+    // Adicione sua lógica de exclusão aqui
+    console.log("Excluir tarefa");
   };
 
   return (
     <View style={styles.container}>
-      {/* Botão de voltar */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back-outline" size={24} color="#000" />
-      </TouchableOpacity>
-
-      {/* Título e descrição da tarefa */}
-      <Text style={styles.title}>{tarefa.titulo}</Text>
-      <Text style={styles.description}>{tarefa.descricao}</Text>
-
-      {/* Data de criação */}
-      <Text style={styles.date}>Criado em {tarefa.data}</Text>
-
-      {/* Botão para editar */}
-      <View style={styles.actions}>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Ionicons name="pencil-outline" size={24} color="#0056D2" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Modal de edição */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TextInput
-              placeholder="Título"
-              value={novoTitulo}
-              onChangeText={setNovoTitulo}
-              style={styles.input}
-              placeholderTextColor="#fff"
-            />
-            <TextInput
-              placeholder="Descrição"
-              value={novaDescricao}
-              onChangeText={setNovaDescricao}
-              style={[styles.input, { height: 80 }]}
-              multiline
-              placeholderTextColor="#fff"
-            />
-
-            <TouchableOpacity style={styles.saveButton} onPress={editarTarefa}>
-              <Text style={styles.saveButtonText}>Salvar Alterações</Text>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.backButton}>←</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>{tarefa.titulo}</Text>
+          <View style={styles.iconContainer}>
+            <TouchableOpacity onPress={handleEdit}>
+              <AntDesign name="edit" size={24} color="#007AFF" style={styles.icon} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            <TouchableOpacity onPress={handleDelete}>
+              <Ionicons name="trash-outline" size={24} color="#FF3B30" style={styles.icon} />
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+        <Text style={styles.description}>{tarefa.descricao}</Text>
+        <Text style={styles.date}>Criado em {tarefa.data}</Text>
+      </SafeAreaView>
     </View>
   );
 }
@@ -87,64 +44,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF', // Cor de fundo branco
+  },
+  safeArea: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
   backButton: {
-    marginBottom: 20,
+    fontSize: 24,
+    color: '#007AFF', // Cor do botão voltar
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    color: '#000000', // Cor do título
   },
   description: {
-    fontSize: 18,
+    fontSize: 16,
+    color: '#333333', // Cor da descrição
     marginBottom: 20,
   },
   date: {
     fontSize: 14,
-    color: '#777',
-    marginBottom: 20,
-  },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#0056D2',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#fff',
-    color: '#fff',
-    padding: 10,
-    borderRadius: 5,
+    color: '#888888', // Cor da data
+    marginTop: 'auto',
     marginBottom: 10,
   },
-  saveButton: {
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 5,
+  iconContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  saveButtonText: {
-    color: '#0056D2',
-    fontWeight: 'bold',
-  },
-  cancelButton: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  cancelButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  icon: {
+    marginLeft: 15, // Espaçamento entre os ícones
   },
 });

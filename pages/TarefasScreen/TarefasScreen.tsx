@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Ionicons } from '@expo/vector-icons'; // Ícones
 import styles from './TarefaScreen.styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 interface Tarefa {
   id: string;
@@ -18,6 +19,8 @@ export default function TarefasScreen() {
   const [novoTitulo, setNovoTitulo] = useState('');
   const [novaDescricao, setNovaDescricao] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+
+  const navigation = useNavigation();
 
   // Função para carregar as tarefas salvas ao abrir o app
   const carregarTarefas = async () => {
@@ -62,16 +65,18 @@ export default function TarefasScreen() {
   };
 
   const renderTarefa = ({ item }: { item: Tarefa }) => (
-    <View style={styles.card}>
-      <Text style={styles.title}>{item.titulo}</Text>
-      <Text style={styles.description}>{item.descricao}</Text>
-      <View style={styles.dateEbutton}> 
-        <Text style={styles.date}>Criado em {item.data}</Text>
-        <TouchableOpacity onPress={() => removerTarefa(item.id)}>
-          <Ionicons name="trash-outline" size={25} color="#fff" />
-        </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", { tarefa: item })}>
+      <View style={styles.card}>
+        <Text style={styles.title}>{item.titulo}</Text>
+        <Text style={styles.description}>{item.descricao}</Text>
+        <View style={styles.dateEbutton}>
+          <Text style={styles.date}>Criado em {item.data}</Text>
+          <TouchableOpacity onPress={() => removerTarefa(item.id)}>
+            <Ionicons name="trash-outline" size={25} color="#fff" />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   const removerTarefa = (id: string) => {
@@ -83,7 +88,7 @@ export default function TarefasScreen() {
   return (
     <View style={styles.container}>
       {/* Header com o logo */}
-      <SafeAreaView> 
+      <SafeAreaView>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>LISTA DE TAREFAS</Text>
         </View>
