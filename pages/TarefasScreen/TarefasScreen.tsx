@@ -10,7 +10,6 @@ interface Tarefa {
   id: string;
   titulo: string;
   descricao: string;
-  prazo?: string;
   data: string;
 }
 
@@ -65,7 +64,18 @@ export default function TarefasScreen() {
   };
 
   const renderTarefa = ({ item }: { item: Tarefa }) => (
-    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", { tarefa: item, removerTarefa })}>
+    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", { 
+        tarefa: item,
+        removerTarefa,
+        salvarTarefa: (tarefaAtualizada: Tarefa) => {
+            const tarefasAtualizadas = tarefas.map(tarefa => 
+                tarefa.id === tarefaAtualizada.id ? tarefaAtualizada : tarefa
+            );
+            setTarefas(tarefasAtualizadas); // Atualiza o estado local
+            salvarTarefas(tarefasAtualizadas); // Salva no AsyncStorage
+        },
+        setTarefas // Passa a função setTarefas
+    })}>
       <View style={styles.card}>
         <Text style={styles.title}>{item.titulo}</Text>
         <Text style={styles.description}>{item.descricao}</Text>
@@ -78,6 +88,7 @@ export default function TarefasScreen() {
       </View>
     </TouchableOpacity>
   );
+
 
   const removerTarefa = (id: string) => {
     const tarefasAtualizadas = tarefas.filter(tarefa => tarefa.id !== id);
@@ -130,19 +141,7 @@ export default function TarefasScreen() {
               multiline
               placeholderTextColor="#fff"
             />
-
-            {/* Prazo e adicionar imagem */}
-            <View style={styles.optionalFields}>
-              <TouchableOpacity style={styles.optionalButton}>
-                <Ionicons name="calendar-outline" size={24} color="#fff" />
-                <Text style={styles.optionalButtonText}>Prazo (Opcional)</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.optionalButton}>
-                <Ionicons name="image-outline" size={24} color="#fff" />
-                <Text style={styles.optionalButtonText}>Adicionar IMG (Opcional)</Text>
-              </TouchableOpacity>
-            </View>
-
+            
             <TouchableOpacity style={styles.addTaskButton} onPress={adicionarTarefa}>
               <Text style={styles.addTaskButtonText}>Adicionar Tarefa</Text>
             </TouchableOpacity>
