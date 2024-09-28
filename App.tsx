@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import TarefaScreen from './components/TarefasScreen/TarefasScreen'; // Tela de detalhes da tarefa
+import TarefaScreen from './pages/TarefasScreen/TarefasScreen'; // Tela de detalhes da tarefa
 
 const Stack = createStackNavigator();
 
