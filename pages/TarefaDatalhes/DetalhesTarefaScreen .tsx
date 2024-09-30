@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from 'reac
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import styles from './DetalhesTarefaScreen.styles';
+import CustomModal from '../../components/modal/modal';
 
 export default function DetalhesTarefaScreen({ route, navigation }: any) {
   const { tarefa, removerTarefa, salvarTarefa } = route.params; // Recebe a tarefa e funções
@@ -44,38 +45,29 @@ export default function DetalhesTarefaScreen({ route, navigation }: any) {
       </SafeAreaView>
 
       {/* Modal para editar tarefa */}
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <CustomModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onClose={() => setModalVisible(false)}
+        onSave={handleEdit}
+        title="Editar Tarefa"
+        saveButtonText="Salvar Alterações"
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TextInput
-              placeholder="Título"
-              value={titulo}
-              onChangeText={setTitulo}
-              style={styles.input}
-              placeholderTextColor="#fff"
-            />
-            <TextInput
-              placeholder="Descrição"
-              value={descricao}
-              onChangeText={setDescricao}
-              style={[styles.input, { height: 80 }]}
-              multiline
-              placeholderTextColor="#fff"
-            />
-            <TouchableOpacity style={styles.addTaskButton} onPress={handleEdit}>
-              <Text style={styles.addTaskButtonText}>Salvar Alterações</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        <TextInput
+          placeholder="Título"
+          value={titulo}
+          onChangeText={setTitulo}
+          style={styles.input}
+          placeholderTextColor="#fff"
+        />
+        <TextInput
+          placeholder="Descrição"
+          value={descricao}
+          onChangeText={setDescricao}
+          style={[styles.input, { height: 80 }]}
+          multiline
+          placeholderTextColor="#fff"
+        />
+      </CustomModal>
     </View>
   );
 }

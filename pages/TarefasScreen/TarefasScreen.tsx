@@ -5,6 +5,7 @@ import { AntDesign, Ionicons } from '@expo/vector-icons'; // Ícones
 import styles from './TarefaScreen.styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import CustomModal from '../../components/modal/modal';
 
 interface Tarefa {
   id: string;
@@ -64,17 +65,17 @@ export default function TarefasScreen() {
   };
 
   const renderTarefa = ({ item }: { item: Tarefa }) => (
-    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", { 
-        tarefa: item,
-        removerTarefa,
-        salvarTarefa: (tarefaAtualizada: Tarefa) => {
-            const tarefasAtualizadas = tarefas.map(tarefa => 
-                tarefa.id === tarefaAtualizada.id ? tarefaAtualizada : tarefa
-            );
-            setTarefas(tarefasAtualizadas); // Atualiza o estado local
-            salvarTarefas(tarefasAtualizadas); // Salva no AsyncStorage
-        },
-        setTarefas // Passa a função setTarefas
+    <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", {
+      tarefa: item,
+      removerTarefa,
+      salvarTarefa: (tarefaAtualizada: Tarefa) => {
+        const tarefasAtualizadas = tarefas.map(tarefa =>
+          tarefa.id === tarefaAtualizada.id ? tarefaAtualizada : tarefa
+        );
+        setTarefas(tarefasAtualizadas); // Atualiza o estado local
+        salvarTarefas(tarefasAtualizadas); // Salva no AsyncStorage
+      },
+      setTarefas // Passa a função setTarefas
     })}>
       <View style={styles.card}>
         <Text style={styles.title}>{item.titulo}</Text>
@@ -118,39 +119,29 @@ export default function TarefasScreen() {
       </TouchableOpacity>
 
       {/* Modal para adicionar tarefa */}
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <CustomModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onClose={() => setModalVisible(false)}
+        onSave={adicionarTarefa}
+        title="Adicionar Tarefa"
+        saveButtonText="Adicionar Tarefa"
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TextInput
-              placeholder="Título"
-              value={novoTitulo}
-              onChangeText={setNovoTitulo}
-              style={styles.input}
-              placeholderTextColor="#fff"
-            />
-            <TextInput
-              placeholder="Descrição"
-              value={novaDescricao}
-              onChangeText={setNovaDescricao}
-              style={[styles.input, { height: 80 }]}
-              multiline
-              placeholderTextColor="#fff"
-            />
-            
-            <TouchableOpacity style={styles.addTaskButton} onPress={adicionarTarefa}>
-              <Text style={styles.addTaskButtonText}>Adicionar Tarefa</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        <TextInput
+          placeholder="Título"
+          value={novoTitulo}
+          onChangeText={setNovoTitulo}
+          style={styles.input}
+          placeholderTextColor="#fff"
+        />
+        <TextInput
+          placeholder="Descrição"
+          value={novaDescricao}
+          onChangeText={setNovaDescricao}
+          style={[styles.input, { height: 80 }]}
+          multiline
+          placeholderTextColor="#fff"
+        />
+      </CustomModal>
     </View>
   );
 }
