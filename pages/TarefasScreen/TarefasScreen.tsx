@@ -14,6 +14,7 @@ interface Tarefa {
   titulo: string;
   descricao: string;
   data: string;
+  concluida: boolean;
 }
 
 export default function TarefasScreen() {
@@ -45,6 +46,7 @@ export default function TarefasScreen() {
       titulo: values.titulo,
       descricao: values.descricao,
       data: new Date().toLocaleDateString(),
+      concluida: false,
     };
     const tarefasAtualizadas = [...tarefas, novaTarefa];
     setTarefas(tarefasAtualizadas);
@@ -66,6 +68,14 @@ export default function TarefasScreen() {
     salvarTarefas(tarefasAtualizadas);
   };
 
+  const alternarConclusaoTarefa = (id: string) => {
+    const tarefasAtualizadas = tarefas.map(tarefa =>
+      tarefa.id === id ? { ...tarefa, concluida: !tarefa.concluida } : tarefa
+    );
+    setTarefas(tarefasAtualizadas);
+    salvarTarefas(tarefasAtualizadas);
+  };
+
   const renderTarefa = ({ item }: { item: Tarefa }) => (
     <TouchableOpacity onPress={() => navigation.navigate("TarefaDetalhes", {
       tarefa: item,
@@ -79,9 +89,24 @@ export default function TarefasScreen() {
       },
       setTarefas // Passa a função setTarefas
     })}>
-      <View style={styles.card}>
-        <Text style={styles.title}>{item.titulo}</Text>
-        <Text style={styles.description}>{item.descricao}</Text>
+      <View style={[styles.card, item.concluida && styles.cardConcluida]}>
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity onPress={() => alternarConclusaoTarefa(item.id)}>
+            <AntDesign
+              name={item.concluida ? "checkcircle" : "checkcircleo"}
+              size={25}
+              color={item.concluida ? "#00FF00" : "#fff"}
+            />
+          </TouchableOpacity>
+          <View style={styles.textContainer}>
+            <Text style={[styles.title, item.concluida && styles.titleConcluida]}>
+              {item.titulo}
+            </Text>
+            <Text style={[styles.description, item.concluida && styles.descriptionConcluida]}>
+              {item.descricao}
+            </Text>
+          </View>
+        </View>
         <View style={styles.dateEbutton}>
           <Text style={styles.date}>Criado em {item.data}</Text>
           <TouchableOpacity onPress={() => removerTarefa(item.id)}>
@@ -104,7 +129,7 @@ export default function TarefasScreen() {
           <Text style={styles.headerTitle}>APP LISTA TAREFAS</Text>
         </View>
       </SafeAreaView>
-      
+
       <FlatList
         data={tarefas}
         renderItem={renderTarefa}
@@ -152,7 +177,7 @@ export default function TarefasScreen() {
               {touched.titulo && errors.titulo && (
                 <Text style={styles.errorText}>{errors.titulo}</Text>
               )}
-              
+
               <TextInput
                 placeholder="Descrição"
                 value={values.descricao}

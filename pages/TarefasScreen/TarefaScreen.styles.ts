@@ -117,6 +117,25 @@ const styles = StyleSheet.create({
       fontSize: 12, // Tamanho da fonte para o texto de erro
       marginBottom: 10, // Espaço abaixo do erro
     },
+    cardConcluida: {
+      backgroundColor: '#A9A9A9', // Cor para card de tarefa concluída
+    },
+    titleConcluida: {
+      textDecorationLine: 'line-through', // Risco no título da tarefa concluída
+      color: '#D3D3D3', // Cor mais clara para o texto
+    },
+    descriptionConcluida: {
+      textDecorationLine: 'line-through',
+      color: '#D3D3D3',
+    },
+    checkboxContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textContainer: {
+      flex: 1,
+      marginLeft: 10,
+    },
   });
 
 export default styles;
