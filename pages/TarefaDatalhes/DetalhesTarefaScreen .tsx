@@ -1,74 +1,102 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import styles from './DetalhesTarefaScreen.styles';
 import CustomModal from '../../components/modal/modal';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 
-export default function DetalhesTarefaScreen({ route, navigation }: any) {
-  const { tarefa, removerTarefa, salvarTarefa } = route.params; // Recebe a tarefa e funções
+interface Tarefa {
+  id: string;
+  titulo: string;
+  descricao: string;
+  data: string;
+}
 
+interface TarefaDetalhesProps {
+  route: { params: { tarefa: Tarefa; removerTarefa: (id: string) => void; salvarTarefa: (tarefaAtualizada: Tarefa) => void; setTarefas: (tarefas: Tarefa[]) => void } };
+}
+
+export default function TarefaDetalhesScreen({ route }: TarefaDetalhesProps) {
+  const { tarefa, removerTarefa, salvarTarefa } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
-  const [titulo, setTitulo] = useState(tarefa.titulo);
-  const [descricao, setDescricao] = useState(tarefa.descricao);
+  const navigation = useNavigation();
 
-  const handleEdit = () => {
-    if (titulo && descricao) {
-      const tarefaAtualizada = { ...tarefa, titulo, descricao }; // Atualiza a tarefa
-      salvarTarefa(tarefaAtualizada); // Chama a função para salvar a tarefa atualizada
-      navigation.goBack(); // Volta para a tela anterior
-    }
-  };
-
-  const handleDelete = () => {
-    removerTarefa(tarefa.id); // Chama a função para remover a tarefa
-    navigation.goBack(); // Volta para a tela anterior
-  };
+  const tarefaSchema = Yup.object().shape({
+    titulo: Yup.string().required('O título é obrigatório').min(3, 'O título deve ter pelo menos 3 caracteres'),
+    descricao: Yup.string().required('A descrição é obrigatória').min(5, 'A descrição deve ter pelo menos 5 caracteres'),
+  });
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>←</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>{tarefa.titulo}</Text>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <AntDesign name="edit" size={24} color="#007AFF" style={styles.icon} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete}>
-            <Ionicons name="trash-outline" size={24} color="#FF3B30" style={styles.icon} />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.description}>{tarefa.descricao}</Text>
-        <Text style={styles.date}>Criado em {tarefa.data}</Text>
-      </SafeAreaView>
+      <Text style={styles.title}>{tarefa.titulo}</Text>
+      <Text style={styles.description}>{tarefa.descricao}</Text>
+      <Text style={styles.date}>Criado em: {tarefa.data}</Text>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <AntDesign name="edit" size={25} color="#0056D2" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => removerTarefa(tarefa.id)}>
+          <AntDesign name="delete" size={25} color="#0056D2" />
+        </TouchableOpacity>
+      </View>
 
       {/* Modal para editar tarefa */}
-      <CustomModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSave={handleEdit}
-        title="Editar Tarefa"
-        saveButtonText="Salvar Alterações"
+      <Formik
+        initialValues={{ titulo: tarefa.titulo, descricao: tarefa.descricao }}
+        validationSchema={tarefaSchema}
+        onSubmit={(values) => {
+          const tarefaAtualizada = { ...tarefa, ...values };
+          salvarTarefa(tarefaAtualizada);
+          setModalVisible(false); // Fecha o modal após salvar
+          navigation.goBack();
+        }}
       >
-        <TextInput
-          placeholder="Título"
-          value={titulo}
-          onChangeText={setTitulo}
-          style={styles.input}
-          placeholderTextColor="#fff"
-        />
-        <TextInput
-          placeholder="Descrição"
-          value={descricao}
-          onChangeText={setDescricao}
-          style={[styles.input, { height: 80 }]}
-          multiline
-          placeholderTextColor="#fff"
-        />
-      </CustomModal>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,  // <- Pegue o handleSubmit aqui
+          values,
+          errors,
+          touched,
+        }) => (
+          <CustomModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            title="Editar Tarefa"
+            saveButtonText="Salvar Alterações"
+            // Agora passando o handleSubmit corretamente
+            onSave={handleSubmit} // Passando handleSubmit diretamente para o modal
+          >
+            <TextInput
+              placeholder="Título"
+              value={values.titulo}
+              onChangeText={handleChange('titulo')}
+              onBlur={handleBlur('titulo')}
+              style={styles.input}
+              placeholderTextColor="#fff"
+            />
+            {touched.titulo && errors.titulo && (
+              <Text style={styles.errorText}>{errors.titulo}</Text>
+            )}
+            
+            <TextInput
+              placeholder="Descrição"
+              value={values.descricao}
+              onChangeText={handleChange('descricao')}
+              onBlur={handleBlur('descricao')}
+              style={[styles.input, { height: 80 }]}
+              multiline
+              placeholderTextColor="#fff"
+            />
+            {touched.descricao && errors.descricao && (
+              <Text style={styles.errorText}>{errors.descricao}</Text>
+            )}
+          </CustomModal>
+        )}
+      </Formik>
     </View>
   );
 }
-

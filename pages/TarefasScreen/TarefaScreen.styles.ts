@@ -111,7 +111,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    }
+    },
+    errorText: {
+      color: 'red', // Definindo a cor vermelha para o texto de erro
+      fontSize: 12, // Tamanho da fonte para o texto de erro
+      marginBottom: 10, // Espaço abaixo do erro
+    },
   });
 
 export default styles;

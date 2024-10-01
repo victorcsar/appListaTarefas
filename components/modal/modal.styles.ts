@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+// CustomModal.styles.ts
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   modalOverlay: {
@@ -7,45 +8,47 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)', // Fundo semi-transparente
   },
   modalContent: {
-    backgroundColor: '#0056D2', // Mesma cor de fundo (#0056D2)
+    backgroundColor: '#0056D2', // Cor de fundo do modal
     padding: 20,
-    borderTopLeftRadius: 20, // Canto arredondado no topo esquerdo
-    borderTopRightRadius: 20, // Canto arredondado no topo direito
-    paddingBottom: 40, // Espaço inferior
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 40,
   },
   title: {
-    fontSize: 24, // Tamanho do título
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff', // Cor branca para o título
-    marginBottom: 20, // Espaçamento inferior
+    color: '#fff',
+    marginBottom: 20,
     textAlign: 'center',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#fff', // Bordas brancas
-    color: '#fff', // Texto branco
+    borderColor: '#fff',
+    color: '#fff',
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
   },
   saveButton: {
-    backgroundColor: '#fff', // Fundo branco
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center', // Centraliza o texto dentro do botão
+    alignItems: 'center',
     marginTop: 10,
   },
   saveButtonText: {
-    color: '#0056D2', // Texto azul
+    color: '#0056D2',
     fontWeight: 'bold',
-  },
-  cancelButton: {
-    marginTop: 10,
-    alignItems: 'center', // Centraliza o texto do botão
   },
   cancelButtonText: {
-    color: '#fff', // Texto branco
+    color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 });
 

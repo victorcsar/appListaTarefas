@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AntDesign, Ionicons } from '@expo/vector-icons'; // Ícones
+import { AntDesign } from '@expo/vector-icons'; // Ícones
 import styles from './TarefaScreen.styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import CustomModal from '../../components/modal/modal';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
 
 interface Tarefa {
   id: string;
@@ -16,8 +18,6 @@ interface Tarefa {
 
 export default function TarefasScreen() {
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
-  const [novoTitulo, setNovoTitulo] = useState('');
-  const [novaDescricao, setNovaDescricao] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
@@ -39,21 +39,17 @@ export default function TarefasScreen() {
     carregarTarefas();
   }, []);
 
-  const adicionarTarefa = () => {
-    if (novoTitulo && novaDescricao) {
-      const novaTarefa = {
-        id: Math.random().toString(),
-        titulo: novoTitulo,
-        descricao: novaDescricao,
-        data: new Date().toLocaleDateString(),
-      };
-      const tarefasAtualizadas = [...tarefas, novaTarefa];
-      setTarefas(tarefasAtualizadas);
-      salvarTarefas(tarefasAtualizadas);
-      setNovoTitulo('');
-      setNovaDescricao('');
-      setModalVisible(false); // Fecha o modal após adicionar
-    }
+  const adicionarTarefa = (values: { titulo: string; descricao: string }) => {
+    const novaTarefa = {
+      id: Math.random().toString(),
+      titulo: values.titulo,
+      descricao: values.descricao,
+      data: new Date().toLocaleDateString(),
+    };
+    const tarefasAtualizadas = [...tarefas, novaTarefa];
+    setTarefas(tarefasAtualizadas);
+    salvarTarefas(tarefasAtualizadas);
+    setModalVisible(false); // Fecha o modal após adicionar
   };
 
   const salvarTarefas = async (tarefasAtualizadas: Tarefa[]) => {
@@ -62,6 +58,12 @@ export default function TarefasScreen() {
     } catch (e) {
       console.log('Erro ao salvar tarefas:', e);
     }
+  };
+
+  const removerTarefa = (id: string) => {
+    const tarefasAtualizadas = tarefas.filter(tarefa => tarefa.id !== id);
+    setTarefas(tarefasAtualizadas);
+    salvarTarefas(tarefasAtualizadas);
   };
 
   const renderTarefa = ({ item }: { item: Tarefa }) => (
@@ -83,29 +85,26 @@ export default function TarefasScreen() {
         <View style={styles.dateEbutton}>
           <Text style={styles.date}>Criado em {item.data}</Text>
           <TouchableOpacity onPress={() => removerTarefa(item.id)}>
-            <Ionicons name="trash-outline" size={25} color="#fff" />
+            <AntDesign name="delete" size={25} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
   );
 
-
-  const removerTarefa = (id: string) => {
-    const tarefasAtualizadas = tarefas.filter(tarefa => tarefa.id !== id);
-    setTarefas(tarefasAtualizadas);
-    salvarTarefas(tarefasAtualizadas);
-  };
+  const tarefaSchema = Yup.object().shape({
+    titulo: Yup.string().required('O título é obrigatório').min(3, 'O título deve ter pelo menos 3 caracteres'),
+    descricao: Yup.string().required('A descrição é obrigatória').min(5, 'A descrição deve ter pelo menos 5 caracteres'),
+  });
 
   return (
     <View style={styles.container}>
-      {/* Header com o logo */}
       <SafeAreaView>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>LISTA DE TAREFAS</Text>
         </View>
       </SafeAreaView>
-      {/* Lista de tarefas */}
+      
       <FlatList
         data={tarefas}
         renderItem={renderTarefa}
@@ -113,35 +112,63 @@ export default function TarefasScreen() {
         contentContainerStyle={styles.listContainer}
       />
 
-      {/* Botão suspenso para adicionar nova tarefa */}
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <AntDesign name="plus" size={30} color="#fff" />
       </TouchableOpacity>
 
       {/* Modal para adicionar tarefa */}
-      <CustomModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSave={adicionarTarefa}
-        title="Adicionar Tarefa"
-        saveButtonText="Adicionar Tarefa"
+      <Formik
+        initialValues={{ titulo: '', descricao: '' }}
+        validationSchema={tarefaSchema}
+        onSubmit={(values, { resetForm }) => {
+          adicionarTarefa(values);
+          resetForm();
+        }}
       >
-        <TextInput
-          placeholder="Título"
-          value={novoTitulo}
-          onChangeText={setNovoTitulo}
-          style={styles.input}
-          placeholderTextColor="#fff"
-        />
-        <TextInput
-          placeholder="Descrição"
-          value={novaDescricao}
-          onChangeText={setNovaDescricao}
-          style={[styles.input, { height: 80 }]}
-          multiline
-          placeholderTextColor="#fff"
-        />
-      </CustomModal>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
+          <CustomModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            onSave={handleSubmit}
+            title="Adicionar Tarefa"
+            saveButtonText="Adicionar Tarefa"
+          >
+            <>
+              <TextInput
+                placeholder="Título"
+                value={values.titulo}
+                onChangeText={handleChange('titulo')}
+                onBlur={handleBlur('titulo')}
+                style={styles.input}
+                placeholderTextColor="#fff"
+              />
+              {touched.titulo && errors.titulo && (
+                <Text style={styles.errorText}>{errors.titulo}</Text>
+              )}
+              
+              <TextInput
+                placeholder="Descrição"
+                value={values.descricao}
+                onChangeText={handleChange('descricao')}
+                onBlur={handleBlur('descricao')}
+                style={[styles.input, { height: 80 }]}
+                multiline
+                placeholderTextColor="#fff"
+              />
+              {touched.descricao && errors.descricao && (
+                <Text style={styles.errorText}>{errors.descricao}</Text>
+              )}
+            </>
+          </CustomModal>
+        )}
+      </Formik>
     </View>
   );
 }

@@ -1,40 +1,50 @@
-import React, { ReactNode } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import React from 'react';
+import { Modal, View, Text, TouchableOpacity } from 'react-native';
 import styles from './modal.styles';
+
 
 interface CustomModalProps {
   visible: boolean;
   onClose: () => void;
-  onSave: () => void;
   title: string;
-  children: ReactNode;
-  saveButtonText?: string;
-  cancelButtonText?: string;
+  saveButtonText: string;
+  onSave: () => void; // Atualizado para ser acionado pelo Formik
+  children: React.ReactNode;
 }
 
-export default function CustomModal({
+const CustomModal: React.FC<CustomModalProps> = ({
   visible,
   onClose,
-  onSave,
   title,
-  children,
-  saveButtonText = "Salvar",
-  cancelButtonText = "Cancelar",
-}: CustomModalProps) {
+  saveButtonText,
+  onSave,
+  children
+}) => {
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal
+      transparent
+      visible={visible}
+      animationType="slide"
+    >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.title}>{title}</Text>
-          {children} 
-          <TouchableOpacity style={styles.saveButton} onPress={onSave}>
-            <Text style={styles.saveButtonText}>{saveButtonText}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-            <Text style={styles.cancelButtonText}>{cancelButtonText}</Text>
-          </TouchableOpacity>
+
+          {children}
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.saveButton} onPress={onSave}>
+              <Text style={styles.saveButtonText}>{saveButtonText}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={onClose}>
+              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
   );
-}
+};
+
+export default CustomModal;
