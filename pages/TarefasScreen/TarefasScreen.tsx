@@ -101,7 +101,7 @@ export default function TarefasScreen() {
     <View style={styles.container}>
       <SafeAreaView>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>LISTA DE TAREFAS</Text>
+          <Text style={styles.headerTitle}>APP LISTA TAREFAS</Text>
         </View>
       </SafeAreaView>
       
