@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
       marginBottom: 10, // Espaço abaixo do erro
     },
     cardConcluida: {
-      backgroundColor: '#A9A9A9', // Cor para card de tarefa concluída
+      backgroundColor: '#026602', // Cor para card de tarefa concluída
+      // #A9A9A9 cor cinza
     },
     titleConcluida: {
       textDecorationLine: 'line-through', // Risco no título da tarefa concluída

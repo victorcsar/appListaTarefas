@@ -91,13 +91,6 @@ export default function TarefasScreen() {
     })}>
       <View style={[styles.card, item.concluida && styles.cardConcluida]}>
         <View style={styles.checkboxContainer}>
-          <TouchableOpacity onPress={() => alternarConclusaoTarefa(item.id)}>
-            <AntDesign
-              name={item.concluida ? "checkcircle" : "checkcircleo"}
-              size={25}
-              color={item.concluida ? "#00FF00" : "#fff"}
-            />
-          </TouchableOpacity>
           <View style={styles.textContainer}>
             <Text style={[styles.title, item.concluida && styles.titleConcluida]}>
               {item.titulo}
@@ -106,6 +99,13 @@ export default function TarefasScreen() {
               {item.descricao}
             </Text>
           </View>
+          <TouchableOpacity onPress={() => alternarConclusaoTarefa(item.id)}>
+            <AntDesign
+              name={item.concluida ? "checkcircle" : "checkcircleo"}
+              size={25}
+              color={item.concluida ? "#00FF00" : "#fff"}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.dateEbutton}>
           <Text style={styles.date}>Criado em {item.data}</Text>
