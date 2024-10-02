@@ -5,12 +5,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  safeArea: {
+  containerDetalhes:{
+    flex: 1,
+    padding: 20,
+    gap: 10,
+  },
+  containerData:{
+    alignItems: 'center',
     flex: 1,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#fff',
@@ -99,7 +105,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 1,
-    marginBottom: 5,
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  buttonContainer2:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap:25
   },
   headerTitle: {
     fontSize: 20,

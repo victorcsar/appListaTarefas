@@ -42,18 +42,29 @@ export default function TarefaDetalhesScreen({ route }: TarefaDetalhesProps) {
         </View>
       </SafeAreaView>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <AntDesign name="edit" size={25} color="#0056D2" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleRemoveTarefa}>
-          <AntDesign name="delete" size={25} color="#0056D2" />
-        </TouchableOpacity>
-      </View>
+      <View style={styles.containerDetalhes}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={navigation.goBack}>
+            <AntDesign name="arrowleft" size={25} color="#0056D2" />
+          </TouchableOpacity>
 
-      <Text style={styles.title}>{tarefa.titulo}</Text>
-      <Text style={styles.description}>{tarefa.descricao}</Text>
-      <Text style={styles.date}>Criado em: {tarefa.data}</Text>
+          <View style={styles.buttonContainer2}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <AntDesign name="edit" size={25} color="#0056D2" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleRemoveTarefa}>
+              <AntDesign name="delete" size={25} color="#0056D2" />
+            </TouchableOpacity>
+            
+          </View>
+
+        </View>
+        <Text style={styles.title}>{tarefa.titulo}</Text>
+        <Text style={styles.description}>{tarefa.descricao}</Text>
+        <View style={styles.containerData}>
+          <Text style={styles.date}>Criado em: {tarefa.data}</Text>
+        </View>
+      </View>
 
       {/* Modal para editar tarefa */}
       <Formik
