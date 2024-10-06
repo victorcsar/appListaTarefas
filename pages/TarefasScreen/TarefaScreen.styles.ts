@@ -113,17 +113,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     errorText: {
-      color: 'red', // Definindo a cor vermelha para o texto de erro
-      fontSize: 12, // Tamanho da fonte para o texto de erro
-      marginBottom: 10, // Espaço abaixo do erro
+      color: 'red', 
+      fontSize: 12, 
+      marginBottom: 10, 
     },
     cardConcluida: {
-      backgroundColor: '#026602', // Cor para card de tarefa concluída
+      backgroundColor: '#026602', 
       // #A9A9A9 cor cinza
     },
     titleConcluida: {
-      textDecorationLine: 'line-through', // Risco no título da tarefa concluída
-      color: '#D3D3D3', // Cor mais clara para o texto
+      textDecorationLine: 'line-through', 
+      color: '#D3D3D3', 
     },
     descriptionConcluida: {
       textDecorationLine: 'line-through',

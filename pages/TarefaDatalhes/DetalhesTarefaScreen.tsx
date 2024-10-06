@@ -30,8 +30,8 @@ export default function TarefaDetalhesScreen({ route }: TarefaDetalhesProps) {
   });
 
   const handleRemoveTarefa = () => {
-    removerTarefa(tarefa.id); // Remove a tarefa
-    navigation.goBack(); // Volta para a lista de tarefas
+    removerTarefa(tarefa.id); 
+    navigation.goBack(); 
   };
 
   return (
@@ -73,8 +73,8 @@ export default function TarefaDetalhesScreen({ route }: TarefaDetalhesProps) {
         onSubmit={(values) => {
           const tarefaAtualizada = { ...tarefa, ...values };
           salvarTarefa(tarefaAtualizada);
-          setModalVisible(false); // Fecha o modal após salvar
-          navigation.goBack(); // Volta para a lista de tarefas
+          setModalVisible(false);
+          navigation.goBack(); 
         }}
       >
         {({

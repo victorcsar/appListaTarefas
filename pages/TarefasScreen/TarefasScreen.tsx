@@ -51,7 +51,7 @@ export default function TarefasScreen() {
     const tarefasAtualizadas = [...tarefas, novaTarefa];
     setTarefas(tarefasAtualizadas);
     salvarTarefas(tarefasAtualizadas);
-    setModalVisible(false); // Fecha o modal após adicionar
+    setModalVisible(false);
   };
 
   const salvarTarefas = async (tarefasAtualizadas: Tarefa[]) => {

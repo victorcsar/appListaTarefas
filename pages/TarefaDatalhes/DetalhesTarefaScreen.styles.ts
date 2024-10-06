@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   errorText: {
-    color: 'red', // Definindo a cor vermelha para o texto de erro
-    fontSize: 12, // Tamanho da fonte para o texto de erro
-    marginBottom: 10, // Espaço abaixo do erro
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
