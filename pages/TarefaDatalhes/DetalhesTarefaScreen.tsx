@@ -7,13 +7,15 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../../components/Header/Header';
+import { Tarefa } from '../../Types/types';
 
-interface Tarefa {
-  id: string;
-  titulo: string;
-  descricao: string;
-  data: string;
-}
+// export interface  Tarefa {
+//   id: string;
+//   titulo: string;
+//   descricao: string;
+//   data: string;
+// }
 
 interface TarefaDetalhesProps {
   route: { params: { tarefa: Tarefa; removerTarefa: (id: string) => void; salvarTarefa: (tarefaAtualizada: Tarefa) => void; setTarefas: (tarefas: Tarefa[]) => void } };
@@ -36,11 +38,9 @@ export default function TarefaDetalhesScreen({ route }: TarefaDetalhesProps) {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>APP LISTA TAREFAS</Text>
-        </View>
-      </SafeAreaView>
+     <SafeAreaView>
+        <Header/>
+      </SafeAreaView> 
 
       <View style={styles.containerDetalhes}>
         <View style={styles.buttonContainer}>

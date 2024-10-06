@@ -5,19 +5,19 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
     },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-      backgroundColor: '#fff',
-      elevation: 4,
-    },
-    headerTitle: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: '#0056D2',
-    },
+    //  header: {
+    //    flexDirection: 'row',
+    //    justifyContent: 'center',
+    //    alignItems: 'center',
+    //    padding: 20,
+    //    backgroundColor: '#fff',
+    //    elevation: 4,
+    //  },
+    //  headerTitle: {
+    //    fontSize: 20,
+    //    fontWeight: 'bold',
+    //    color: '#0056D2',
+    //  },
     listContainer: {
       paddingHorizontal: 20,
       paddingBottom: 60, 
@@ -39,10 +39,14 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: '#E6E6FA',
       marginVertical: 5,
+      textAlign: 'justify',
+      paddingRight: 10,
+      height: 60,
     },
     date: {
       fontSize: 12,
       color: '#E6E6FA',
+      paddingHorizontal: 10,
     },
     addButton: {
       position: 'absolute',

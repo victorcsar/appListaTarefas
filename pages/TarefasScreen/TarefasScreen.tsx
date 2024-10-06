@@ -8,14 +8,17 @@ import { useNavigation } from '@react-navigation/native';
 import CustomModal from '../../components/modal/modal';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import Header from '../../components/Header/Header';
+import { Tarefa } from '../../Types/types';
 
-interface Tarefa {
-  id: string;
-  titulo: string;
-  descricao: string;
-  data: string;
-  concluida: boolean;
-}
+
+// interface Tarefa {
+//   id: string;
+//   titulo: string;
+//   descricao: string;
+//   data: string;
+//   concluida: boolean;
+// }
 
 export default function TarefasScreen() {
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
@@ -125,10 +128,8 @@ export default function TarefasScreen() {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>APP LISTA TAREFAS</Text>
-        </View>
-      </SafeAreaView>
+        <Header/>
+      </SafeAreaView> 
 
       <FlatList
         data={tarefas}
